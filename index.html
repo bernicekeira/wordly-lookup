@@ -1,29 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wordly LookUp</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Wordly Dictionary: look up a word and see its meaning, pronunciation, and synonyms.">
+  <title>Wordly LookUp</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="container my-4">
-    <h1 class="mb-3">Wordly LookUp</h1>
-    <button id="theme-btn" class="btn btn-outline-secondary mb-3">Toggle theme</button>
+  <div class="container my-4" style="max-width: 640px;">
 
-    <form id="search-form" class="input-group mb-3">
-      <input type="text" id="word-input" class="form-control" placeholder="Type a word">
-      <button type="submit" class="btn btn-primary">Search</button>
-    </form>
+    <header class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="m-0">Wordly LookUp</h1>
+      <button id="theme-btn" class="btn btn-outline-secondary btn-sm" type="button"
+              aria-label="Switch to dark theme" aria-pressed="false">Dark theme</button>
+    </header>
 
-    <p id="message" class="text-danger"></p>
+    <main>
+      <section aria-labelledby="search-heading">
+        <h2 id="search-heading" class="visually-hidden">Search for a word</h2>
 
-    <div id="result" class="card card-body d-none"></div>
-      <h2 class="mt-4">Saved words</h2>
-      <ul id="saved-list" class="list-group"></ul>
-    </div> 
-    <script src="script.js"></script>
+        <form id="search-form" class="input-group mb-2" role="search" aria-label="Dictionary search">
+          <label for="word-input" class="visually-hidden">Word to look up</label>
+          <input type="text" id="word-input" class="form-control" placeholder="Type a word"
+                 autocomplete="off" required>
+          <button type="submit" class="btn btn-primary" aria-label="Search for the word">Search</button>
+        </form>
 
+        <p id="message" role="status" aria-live="polite"></p>
+      </section>
+
+      <section aria-labelledby="result-heading">
+        <h2 id="result-heading" class="visually-hidden">Word definition</h2>
+        <article id="result" class="card card-body d-none" aria-live="polite"></article>
+      </section>
+
+      <section aria-labelledby="saved-heading" class="mt-4">
+        <h2 id="saved-heading">Saved words</h2>
+        <ul id="saved-list" class="list-group list-group-horizontal flex-wrap"></ul>
+        <p id="empty-message">No saved words yet. Search a word and select Save word.</p>
+      </section>
+    </main>
+
+    <footer class="mt-5 small">
+      <p>Dictionary data from the
+        <a href="https://dictionaryapi.dev/" target="_blank" rel="noopener">Free Dictionary API</a>.</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

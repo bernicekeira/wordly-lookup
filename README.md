@@ -5,6 +5,7 @@ A simple dictionary web page for Wordly, a language learning platform. You type 
 - Search for a word using a form
 - Shows the pronunciation, audio, definitions, examples, and synonyms
 - Save words you like (they are highlighted in yellow)
+- Click a saved word to look it up again
 - Switch between light and dark theme
 - Background image with a light overlay so the text is easy to read
 - Shows an error message if the input is empty, the word is not found, or the request fails
@@ -24,7 +25,7 @@ It is free and needs no API key. The app uses `fetch` to get the data and shows 
 
 ## Files
 - `index.html` - the page, with the Bootstrap link
-- `style.css` - my own styling: background image, highlight, and text colors
+- `style.css` - my own styling: background image, hover effects, animation, and highlight
 - `script.js` - the code that gets the word, shows it, saves words, and changes the theme
 - `background.jpg` - the background image (optional)
 
@@ -37,23 +38,48 @@ It is free and needs no API key. The app uses `fetch` to get the data and shows 
 1. Type a word and click **Search**.
 2. Read the meanings and click play to hear the pronunciation.
 3. Click **Save word** to add it to the saved words list.
-4. Click **Toggle theme** to switch between light and dark.
+4. Click a saved word to search it again.
+5. Click the theme button to switch between light and dark.
 
-## How it works
-1. The form's submit event is caught so the page does not reload.
-2. `fetch` asks the Free Dictionary API for the word.
-3. If the word is found, JavaScript builds the result and shows it in the card.
-4. If not, an error message is shown.
-5. JavaScript changes the style of the page: the `saved-word` class highlights saved words, and Bootstrap's `data-bs-theme` switches the theme.
+## HTML
+- Semantic tags: `header`, `main`, `section`, `article`, `footer`, `form`, and `label`
+- Headings in order (`h1`, then `h2`, then `h3`)
+- Accessibility:
+  - `aria-label` on the buttons, form, and audio player
+  - `aria-labelledby` on the sections
+  - `aria-live` so screen readers announce results and error messages
+  - `aria-pressed` on the theme button
+  - A hidden label for the search box
+
+## CSS
+- Styled search form with a shadow and a focus glow
+- Buttons move up a little when you hover over them
+- The result card fades in when a word is shown
+- Saved words change color on hover
+- Visible outline when using the keyboard
+- Animations are turned off for users who prefer reduced motion
+
+## JavaScript
+- `fetch` requests the word from the API
+- The response is read to get the pronunciation, definitions, examples, and synonyms
+- The page is updated with JavaScript, with no reload
+- Event listeners:
+  - `submit` on the search form
+  - `click` on the Save word button
+  - `click` on each saved word
+  - `click` on the theme button
+- JavaScript changes the style of the page: the `saved-word` class highlights saved words, and Bootstrap's `data-bs-theme` switches the theme
 
 ## Testing
 Test | Expected result |
-|---|---|
+---|---|
 Search `hello` | Meanings, phonetic, and audio are shown |
 Search `asdfgh` | "Sorry, we could not find that word" message |
 Search with an empty box | "Please type a word." message |
 Click Save word | The word is highlighted and added to the saved list |
-Click Toggle theme | The page switches between light and dark |
+Click a saved word | The word is searched again |
+Click the theme button | The page switches between light and dark |
+Press Tab | Each button and link shows a visible outline |
 Turn off the internet and search | Error message is shown |
 
 ## Limitations

@@ -1,16 +1,16 @@
-// ---------- 1. Get the elements from the page ----------
 let form = document.getElementById("search-form");
 let input = document.getElementById("word-input");
 let message = document.getElementById("message");
 let result = document.getElementById("result");
 let savedList = document.getElementById("saved-list");
+let emptyMessage = document.getElementById("empty-message");
 let themeBtn = document.getElementById("theme-btn");
 
-// ---------- 2. Variables that remember things ----------
+// 2. Variables that remember things 
 let savedWords = [];     // the words the user saved
 let currentEntry = null; // the word being shown right now
 
-// ---------- 3. Search form ----------
+// 3. Event listener: search form 
 form.addEventListener("submit", function (event) {
   event.preventDefault(); // stop the page from reloading
   let word = input.value.trim().toLowerCase();
@@ -24,7 +24,7 @@ form.addEventListener("submit", function (event) {
   searchWord(word);
 });
 
-// ---------- 4. Ask the API for the word ----------
+// 4. Fetch: ask the API for the word
 function searchWord(word) {
   message.textContent = "Loading...";
   result.innerHTML = "";
@@ -54,7 +54,7 @@ function searchWord(word) {
     });
 }
 
-// ---------- 5. Show the word on the page ----------
+// 5. Parse the data and update the page 
 function showWord(entry) {
   let html = "";
 
@@ -64,21 +64,22 @@ function showWord(entry) {
     titleClass = "saved-word";
   }
 
-  html += "<h2 class='" + titleClass + "'>" + entry.word + "</h2>";
-  html += "<p>" + (entry.phonetic || "") + "</p>";
+  // Word and pronunciation text
+  html += "<h3 class='" + titleClass + "'>" + entry.word + "</h3>";
+  html += "<p>Pronunciation: " + (entry.phonetic || "not available") + "</p>";
 
-  // Audio: use the first pronunciation that has an audio link
+  // Pronunciation audio: use the first one that has an audio link
   for (let i = 0; i < entry.phonetics.length; i++) {
     if (entry.phonetics[i].audio) {
-      html += "<audio controls src='" + entry.phonetics[i].audio + "'></audio>";
+      html += "<audio controls src='" + entry.phonetics[i].audio + "' aria-label='Pronunciation of " + entry.word + "'></audio>";
       break;
     }
   }
 
-  // Save button (Bootstrap button classes)
-  html += "<p><button class='btn btn-outline-primary btn-sm' onclick='saveCurrentWord()'>Save word</button></p>";
+  // Save button
+  html += "<p><button id='save-btn' class='btn btn-outline-primary btn-sm' type='button' aria-label='Save the word " + entry.word + "'>Save word</button></p>";
 
-  // Meanings, definitions, examples, synonyms
+  // Meanings: part of speech, definitions, examples, synonyms
   for (let i = 0; i < entry.meanings.length; i++) {
     let meaning = entry.meanings[i];
     html += "<p class='part-of-speech'>" + meaning.partOfSpeech + "</p>";
@@ -96,11 +97,16 @@ function showWord(entry) {
     }
   }
 
+  // Put everything on the page
   result.innerHTML = html;
   result.classList.remove("d-none"); // Bootstrap class: shows the card
+
+  // Event listener: the Save button only exists after the line above runs
+  let saveBtn = document.getElementById("save-btn");
+  saveBtn.addEventListener("click", saveCurrentWord);
 }
 
-// ---------- 6. Save a word ----------
+// ---------- 6. Saving words ----------
 function saveCurrentWord() {
   if (currentEntry === null) {
     return;
@@ -120,21 +126,49 @@ function showSavedWords() {
   savedList.innerHTML = "";
 
   for (let i = 0; i < savedWords.length; i++) {
+    let word = savedWords[i];
+
     let li = document.createElement("li");
-    li.textContent = savedWords[i];
-    li.className = "list-group-item saved-word"; // Bootstrap list item + our highlight
+    li.className = "list-group-item";
+
+    let btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "saved-word";
+    btn.textContent = word;
+    btn.setAttribute("aria-label", "Look up " + word + " again");
+
+    // Event listener: clicking a saved word searches it again
+    btn.addEventListener("click", function () {
+      input.value = word;
+      searchWord(word);
+    });
+
+    li.appendChild(btn);
     savedList.appendChild(li);
+  }
+
+  // Hide the "no saved words" text when the list has words
+  if (savedWords.length === 0) {
+    emptyMessage.classList.remove("d-none");
+  } else {
+    emptyMessage.classList.add("d-none");
   }
 }
 
-// ---------- 7. Theme button (Bootstrap dark mode) ----------
+// ---------- 7. Event listener: theme button ----------
 themeBtn.addEventListener("click", function () {
   let html = document.documentElement;
 
   if (html.getAttribute("data-bs-theme") === "dark") {
     html.setAttribute("data-bs-theme", "light");
+    themeBtn.textContent = "Dark theme";
+    themeBtn.setAttribute("aria-label", "Switch to dark theme");
+    themeBtn.setAttribute("aria-pressed", "false");
   } else {
     html.setAttribute("data-bs-theme", "dark");
+    themeBtn.textContent = "Light theme";
+    themeBtn.setAttribute("aria-label", "Switch to light theme");
+    themeBtn.setAttribute("aria-pressed", "true");
   }
 
   console.log("Theme is now:", html.getAttribute("data-bs-theme"));
