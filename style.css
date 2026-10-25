@@ -1,0 +1,94 @@
+/* ---------- Background image with a light overlay ---------- */
+body {
+  background-color: #f5f7fa; /* shows if the image is missing */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.35)), url("Library1.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Dark theme (Bootstrap sets data-bs-theme="dark" on the html tag) */
+html[data-bs-theme="dark"] body {
+  background-color: #12161c;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("Library1.jpg");
+}
+
+/* HEADINGS */
+h1 {
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+/* LOADING AND ERROR MESSAGES */
+#message {
+  font-weight: bold;
+  min-height: 1.5em;
+  color: #c62828;
+}
+
+html[data-bs-theme="dark"] #message {
+  color: #ff8a80;
+}
+
+/* RESULT CARD */
+#result {
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* SEARCHED WORD */
+#result h2 {
+  display: inline-block;
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+#result audio {
+  display: block;
+  margin: 8px 0;
+  max-width: 100%;
+}
+
+/* PARTS OF SPEECH AND EXAMPLES */
+.part-of-speech {
+  margin-top: 18px;
+  font-style: italic;
+  font-weight: bold;
+  color: #3b6fe0;
+}
+
+html[data-bs-theme="dark"] .part-of-speech {
+  color: #7da2ff;
+}
+
+/* EXAMPLE SENTENCES */
+.example {
+  color: #6b7280;
+  font-style: italic;
+}
+
+html[data-bs-theme="dark"] .example {
+  color: #9ca3af;
+}
+/* SAVED WORDS LIST */
+#saved-list {
+  gap: 8px;
+}
+
+#saved-list li {
+  width: auto;
+  border: none;
+  border-radius: 999px;
+}
+
+/* Yellow highlight (JavaScript adds this class to saved words) */
+.saved-word {
+  background-color: #ffe066;
+  color: #1f2937;
+  padding: 2px 10px;
+  border-radius: 6px;
+}
